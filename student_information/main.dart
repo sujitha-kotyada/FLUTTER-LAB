@@ -11,45 +11,102 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Student Information',
-      home: Scaffold(
-        backgroundColor: Colors.blue.shade50,
-        appBar: AppBar(
-          title: const Text("Student Information"),
-          backgroundColor: Colors.blue,
-          centerTitle: true,
-        ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
+      title: "Student Information",
+      home: const StudentPage(),
+    );
+  }
+}
+
+class StudentPage extends StatefulWidget {
+  const StudentPage({super.key});
+
+  @override
+  State<StudentPage> createState() => _StudentPageState();
+}
+
+class _StudentPageState extends State<StudentPage> {
+  // Controllers
+  final nameController = TextEditingController();
+  final branchController = TextEditingController();
+  final cgpaController = TextEditingController();
+
+  String name = "";
+  String branch = "";
+  String cgpa = "";
+
+  void displayDetails() {
+    setState(() {
+      name = nameController.text;
+      branch = branchController.text;
+      cgpa = cgpaController.text;
+    });
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    branchController.dispose();
+    cgpaController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.blue.shade50,
+      appBar: AppBar(
+        title: const Text("Student Information"),
+        centerTitle: true,
+        backgroundColor: Colors.blue,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          children: [
+            TextField(
+              controller: nameController,
+              decoration: const InputDecoration(
+                labelText: "Enter Student Name",
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 15),
+            TextField(
+              controller: branchController,
+              decoration: const InputDecoration(
+                labelText: "Enter Branch",
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 15),
+            TextField(
+              controller: cgpaController,
+              decoration: const InputDecoration(
+                labelText: "Enter CGPA",
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: displayDetails,
+              child: const Text("Display Details"),
+            ),
+            const SizedBox(height: 20),
+            if (name.isNotEmpty)
               StudentCard(
-                name: "Sujitha",
-                branch: "CSE",
-                cgpa: "9.36",
+                name: name,
+                branch: branch,
+                cgpa: cgpa,
                 icon: Icons.person,
               ),
-              StudentCard(
-                name: "Rupa",
-                branch: "CSE",
-                cgpa: "9.65",
-                icon: Icons.person_2,
-              ),
-              StudentCard(
-                name: "Chelisha",
-                branch: "CSE",
-                cgpa: "9.45",
-                icon: Icons.person_3,
-              ),
-            ],
-          ),
+          ],
         ),
       ),
     );
   }
 }
 
-// Custom Widget
+// Custom StudentCard Widget
 class StudentCard extends StatelessWidget {
   final String name;
   final String branch;
@@ -68,7 +125,6 @@ class StudentCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 300,
-      margin: const EdgeInsets.symmetric(vertical: 8),
       padding: const EdgeInsets.all(15),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -85,7 +141,7 @@ class StudentCard extends StatelessWidget {
         children: [
           Icon(
             icon,
-            size: 40,
+            size: 45,
             color: Colors.blue,
           ),
           const SizedBox(width: 15),
